@@ -1,0 +1,40 @@
+{% extends 'test_app\base.html' %}
+{% load static %}
+{% block content%}
+
+{%for test in tests%}
+<div class="card" style="margin: 10px;">
+    <div class="card-header">
+      
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{test.name}}</h5>
+      <p class="card-text">{{test.description}}</p>
+      <a href="/test/pass/{{test.id}}" class="btn btn-primary">Пройти тест</a>
+      {% if request.user.is_authenticated%}
+         
+          {% if user.is_superuser %}
+          <a href="/test/{{test.id}}" class="btn btn-success">Редагувати тест</a>
+
+            
+            {%endif%}
+      
+          {% else %}
+          {%endif%}
+    </div>
+  </div>
+{%endfor%}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {%for el in pagenumb%}
+        {%if el is curpage%}
+        <li class="page-item active"><a class="page-link" href='/testlist/{{el}}'>{{el}}</a></li>
+        {%else%}
+        <li class="page-item"><a class="page-link" href='/testlist/{{el}}'>{{el}}</a></li>
+        {%endif%}
+        
+        {%endfor%}
+     
+    </ul>
+  </nav>
+{% endblock %}

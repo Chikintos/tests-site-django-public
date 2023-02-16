@@ -1,0 +1,30 @@
+{% extends 'test_app\base.html' %}
+{% load static %}
+{% block content%}
+{%for grp in graph_list%}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <div class="white-box text-center"><img height=330 width=350 class='img-responsive'src="{{grp.Graphity_img_url.url}}"></div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <h2 class="mt-5">
+                        <h2>Назва: <a style="font-size: 25px;">{{grp.name}}</a></h2>
+                    </h2>
+                    <h4 class="box-title mt-5">Опис: </h4>
+                
+                    <p>{{grp.description}}</p>
+       
+                    </ul>
+                    <a type="button" href='/grafity/{{grp.id}}' class="w-100 btn btn-lg btn-outline-primary">Детальніше</a>
+                </div>
+               
+        </div>
+    </div>
+</div>
+
+{%endfor%}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'test_app\base.html' %}
+{% load static %}
+{% block content%}
+{{ title }}
+
+<br></br>
+<form method="POST" action="{% url 'testsubmit' %}" style="width:580px">
+    {% csrf_token %}
+    <input class="form-control" type="hidden" name="test_id" value="{%for el in Test%}{{el.id}}{%endfor%}">
+    <p>{%for el in Test%}{{el.name}}{%endfor%}</p>
+    
+    {%for ans in Answer%}
+    <ul>
+        <li>
+            <p>Питання: {{ans.name}}</p>
+            <ul>
+                {%for var in Variants%}
+                {%for svar in var%}
+
+                {%if svar.Answer.id is ans.id%}
+
+                <li>
+                    <p>{{svar.name}}</p>
+                    <input class="form-check-input" type="radio" id="contactChoice{{svar.id}}"
+                        name="variant_isright,{{ans.id}}" value='{{svar.id}}'>
+
+
+                </li>
+                {%endif%}
+                {%endfor%}
+                {%endfor%}
+
+            </ul>
+        </li>
+    </ul>
+    {%endfor%}
+    <input class="btn btn-dark" type="submit" value="Відправити результат">
+</form>
+{% endblock %}

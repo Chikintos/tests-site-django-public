@@ -1,0 +1,62 @@
+{% extends 'test_app\base.html' %}
+{% load static %}
+{% block content%}
+{{ title }}
+
+<br></br>
+<form method="POST" action="{% url 'savetest' %}" style="width:580px">
+   {% csrf_token %}
+   <input class="form-control" type="hidden" name="test_id" value="{%for el in Test%}{{el.id}}{%endfor%}">
+   <input class="form-control" required type="text" placeholder='Назва тесту' name="test_name"
+      value="{%for el in Test%}{{el.name}}{%endfor%}">
+   {%for ans in Answer%}
+   <ul>
+      <li><input style="width:400px;margin: 10px;" class="form-control" required type="text" placeholder='Запитання'
+            name="answer,{{ans.id}}" value="{{ans.name}}">Оцінка:
+         <input style="width:100px;" placeholder='Оцінка' class="form-control" name="answer_point,{{ans.id}}" required
+            type="text" name="answer_point,{{ans.id}},{{svar.id}}" value="{{ans.point}}">
+         <a href="/test/removequestion/{%for el in Test%}{{el.id}}{%endfor%}/{{ans.id}}"><svg
+               xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+               viewBox="0 0 16 16">
+               <path
+                  d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg></a>
+         <ul>
+            {%for var in Variants%}
+            {%for svar in var%}
+
+            {%if svar.Answer.id is ans.id%}
+
+            <li><input style="width:200px;" placeholder='Відповідь' class="form-control" varid="{{svar.id}}"
+                  questid="{{ans.id}}" required type="text" name="variant,{{ans.id}},{{svar.id}}" value="{{svar.name}}">
+               {%if svar.is_right %}
+
+               <input class="form-check-input" type="radio" id="contactChoice{{svar.id}}"
+                  name="variant_isright,{{ans.id}}" value='{{svar.id}}' checked> <a
+                  href="/test/deletevariant/{{svar.id}}/{%for el in Test%}{{el.id}}{%endfor%}">
+                  {%else%}
+                  <input class="form-check-input" type="radio" id="contactChoice{{svar.id}}"
+                     name="variant_isright,{{ans.id}}" value='{{svar.id}}'> <a
+                     href="/test/deletevariant/{{svar.id}}/{%for el in Test%}{{el.id}}{%endfor%}">
+                     {%endif%}
+
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path
+                           d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                     </svg></a>
+
+            </li>
+            {%endif%}
+            {%endfor%}
+            {%endfor%}
+            <a href="/test/addvariant/{{ans.id}}/{%for el in Test%}{{el.id}}{%endfor%}"><h6>Додати Відповідь</h6></a>
+         </ul>
+      </li>
+   </ul>
+   {%endfor%}
+
+   <li><a href="/test/addquestion/{%for el in Test%}{{el.id}}{%endfor%}"><h6>Додати Запитання</h6></a></li>
+   <input class="btn btn-dark" type="submit" value="SAVE">
+</form>
+{% endblock %}
